@@ -1,0 +1,411 @@
+import { useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { 
+  Home as HomeIcon, 
+  Search, 
+  Library, 
+  Github, 
+  Linkedin,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  BadgeCheck,
+  Heart,
+  ExternalLink
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+
+interface Skill {
+  name: string;
+  proficiency: string;
+  experience: string;
+}
+
+interface Project {
+  title: string;
+  subtitle: string;
+  gradient: string;
+  link?: string;
+}
+
+export default function Home() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState([75]);
+  const { scrollY } = useScroll();
+  const headerBg = useTransform(
+    scrollY,
+    [0, 100],
+    ["rgba(7, 7, 7, 0)", "rgb(7, 7, 7)"]
+  );
+
+  // Portfolio Data - Replace with your own information
+  const portfolioData = {
+    name: "Alex Developer",
+    role: "Full-Stack Developer",
+    monthlyListeners: "3,245,678",
+    bio: "Passionate full-stack developer with 5+ years of experience building scalable web applications. Specialized in React, Node.js, and cloud architecture. Always learning, always coding.",
+    education: "B.S. Computer Science, Stanford University",
+    
+    skills: [
+      { name: "React.js", proficiency: "Expert", experience: "5 yrs" },
+      { name: "TypeScript", proficiency: "Expert", experience: "4 yrs" },
+      { name: "Node.js", proficiency: "Advanced", experience: "5 yrs" },
+      { name: "Python", proficiency: "Advanced", experience: "4 yrs" },
+      { name: "PostgreSQL", proficiency: "Advanced", experience: "3 yrs" },
+      { name: "AWS/Cloud", proficiency: "Intermediate", experience: "3 yrs" },
+      { name: "Docker/K8s", proficiency: "Intermediate", experience: "2 yrs" },
+      { name: "GraphQL", proficiency: "Advanced", experience: "3 yrs" },
+    ] as Skill[],
+    
+    projects: [
+      {
+        title: "E-Commerce Platform",
+        subtitle: "React · Node.js · PostgreSQL · 2024",
+        gradient: "from-blue-600 to-blue-800",
+        link: "https://github.com"
+      },
+      {
+        title: "Real-time Analytics Dashboard",
+        subtitle: "Next.js · WebSockets · Redis · 2024",
+        gradient: "from-purple-600 to-purple-800",
+        link: "https://github.com"
+      },
+      {
+        title: "AI Content Generator",
+        subtitle: "Python · OpenAI · FastAPI · 2023",
+        gradient: "from-green-600 to-green-800",
+        link: "https://github.com"
+      },
+      {
+        title: "Mobile Fitness Tracker",
+        subtitle: "React Native · Firebase · 2023",
+        gradient: "from-red-600 to-red-800",
+        link: "https://github.com"
+      },
+      {
+        title: "SaaS Starter Kit",
+        subtitle: "Next.js · Stripe · Prisma · 2023",
+        gradient: "from-yellow-600 to-yellow-800",
+        link: "https://github.com"
+      },
+      {
+        title: "DevOps Automation Tool",
+        subtitle: "Go · Docker · Kubernetes · 2022",
+        gradient: "from-indigo-600 to-indigo-800",
+        link: "https://github.com"
+      },
+    ] as Project[],
+    
+    social: {
+      github: "https://github.com",
+      linkedin: "https://linkedin.com"
+    }
+  };
+
+  return (
+    <div className="flex h-screen w-full overflow-hidden bg-black">
+      {/* Left Sidebar - Hidden on mobile */}
+      <aside className="hidden md:flex w-[280px] bg-sidebar flex-col p-6 gap-6">
+        <div className="flex flex-col gap-4">
+          <Button
+            variant="ghost"
+            className="justify-start gap-4 text-sidebar-foreground hover:text-sidebar-foreground h-10 px-4 font-bold"
+            data-testid="nav-home"
+          >
+            <HomeIcon className="w-6 h-6" />
+            <span className="font-bold text-base">Home</span>
+          </Button>
+          <Button
+            variant="ghost"
+            className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4"
+            data-testid="nav-search"
+          >
+            <Search className="w-6 h-6" />
+            <span className="font-bold text-base">Search</span>
+          </Button>
+          <Button
+            variant="ghost"
+            className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4"
+            data-testid="nav-library"
+          >
+            <Library className="w-6 h-6" />
+            <span className="font-bold text-base">Your Library</span>
+          </Button>
+        </div>
+
+        {/* Connect Section */}
+        <div className="flex-1 flex flex-col gap-2 pt-6 border-t border-sidebar-border">
+          <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-4 mb-2">
+            Connect
+          </h3>
+          <a
+            href={portfolioData.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-sidebar-foreground transition-all duration-200"
+            data-testid="link-github"
+          >
+            <Github className="w-5 h-5" />
+            <span className="font-semibold">GitHub</span>
+          </a>
+          <a
+            href={portfolioData.social.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-sidebar-foreground transition-all duration-200"
+            data-testid="link-linkedin"
+          >
+            <Linkedin className="w-5 h-5" />
+            <span className="font-semibold">LinkedIn</span>
+          </a>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Sticky Header */}
+        <motion.div
+          style={{ backgroundColor: headerBg }}
+          className="sticky top-0 z-40 px-4 md:px-8 py-4 backdrop-blur-md transition-shadow"
+        >
+          <div className="flex items-center gap-4">
+            <Avatar className="w-10 h-10 md:w-12 md:h-12 shadow-lg">
+              <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer" />
+              <AvatarFallback>AD</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl md:text-2xl font-bold text-foreground truncate">{portfolioData.name}</h2>
+                <BadgeCheck className="w-4 h-4 md:w-5 md:h-5 text-blue-500 flex-shrink-0" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          {/* Hero Section */}
+          <section className="relative min-h-[340px] md:h-[400px] flex items-end p-4 md:p-8 bg-gradient-to-b from-indigo-900 via-purple-900 to-background">
+            <div className="flex flex-col md:flex-row items-end md:items-end gap-6 w-full">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="relative mx-auto md:mx-0"
+              >
+                <Avatar className="w-40 h-40 md:w-56 md:h-56 shadow-2xl border-2 border-background/20">
+                  <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer" />
+                  <AvatarFallback className="text-2xl md:text-4xl">AD</AvatarFallback>
+                </Avatar>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex-1 pb-6 text-center md:text-left"
+              >
+                <p className="text-sm font-bold mb-3 tracking-wide">Profile</p>
+                <div className="flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-3 mb-4">
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-black">{portfolioData.name}</h1>
+                  <BadgeCheck className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
+                </div>
+                <p className="text-sm md:text-base text-muted-foreground">
+                  <span className="font-bold text-foreground">{portfolioData.monthlyListeners}</span> monthly listeners · {portfolioData.role}
+                </p>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Action Buttons */}
+          <div className="px-4 md:px-8 py-6 md:py-8 flex items-center justify-center md:justify-start gap-4">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="lg"
+                className="rounded-full w-14 h-14 p-0 bg-primary hover:bg-primary shadow-lg hover:shadow-xl transition-all"
+                onClick={() => setIsPlaying(!isPlaying)}
+                data-testid="button-play"
+              >
+                {isPlaying ? (
+                  <Pause className="w-6 h-6 fill-current" />
+                ) : (
+                  <Play className="w-6 h-6 fill-current ml-1" />
+                )}
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full border-2 border-muted-foreground/30 text-foreground hover:text-foreground hover:border-foreground transition-all"
+                data-testid="button-follow"
+              >
+                <Heart className="w-5 h-5 mr-2" />
+                <span className="font-bold">Follow</span>
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Popular Section (Skills) */}
+          <section className="px-4 md:px-8 py-6 md:py-8">
+            <h2 className="text-2xl font-bold mb-6">Popular</h2>
+            <div className="space-y-1">
+              {portfolioData.skills.map((skill, index) => (
+                <motion.div
+                  key={skill.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto_auto] gap-2 md:gap-4 items-center px-3 md:px-4 py-3 rounded-md hover:bg-card-hover transition-colors group cursor-pointer"
+                  data-testid={`skill-${index}`}
+                >
+                  <div className="w-6 text-right text-muted-foreground group-hover:text-foreground transition-colors text-sm md:text-base">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm md:text-base">{skill.name}</p>
+                  </div>
+                  <div className="text-xs md:text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                    {skill.proficiency}
+                  </div>
+                  <div className="hidden md:block text-sm text-muted-foreground w-16 text-right group-hover:text-foreground transition-colors">
+                    {skill.experience}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* Discography Section (Projects) */}
+          <section className="px-4 md:px-8 py-8 md:py-12">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold">Discography</h2>
+              <p className="text-sm md:text-base text-muted-foreground">Featured projects and work</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+              {portfolioData.projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  data-testid={`project-${index}`}
+                >
+                  <Card className="group bg-card p-3 md:p-4 rounded-lg transition-all duration-300 hover:bg-card-hover cursor-pointer">
+                    <div className="relative mb-3 md:mb-4 overflow-visible">
+                      <div className={`aspect-square rounded-md bg-gradient-to-br ${project.gradient} shadow-lg`} />
+                      <div className="absolute bottom-2 right-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        <Button
+                          size="icon"
+                          className="rounded-full w-10 h-10 md:w-12 md:h-12 bg-primary shadow-xl hover:scale-110 transition-transform"
+                          data-testid={`button-play-project-${index}`}
+                        >
+                          <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
+                        </Button>
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-foreground mb-1 line-clamp-1 text-sm md:text-base">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-2">
+                      {project.subtitle}
+                    </p>
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                        data-testid={`link-project-${index}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        View <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section className="px-4 md:px-8 py-8 md:py-12 pb-32 md:pb-40">
+            <h2 className="text-2xl font-bold mb-6">About</h2>
+            <Card className="bg-card p-6 md:p-8 rounded-lg max-w-4xl">
+              <h3 className="text-lg md:text-xl font-bold mb-4">Artist Bio</h3>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
+                {portfolioData.bio}
+              </p>
+              <div className="pt-4 border-t border-border">
+                <h4 className="font-bold mb-2 text-sm md:text-base">Education</h4>
+                <p className="text-sm md:text-base text-muted-foreground">{portfolioData.education}</p>
+              </div>
+            </Card>
+          </section>
+        </div>
+      </main>
+
+      {/* Bottom Player Bar */}
+      <footer className="fixed bottom-0 left-0 right-0 h-[80px] md:h-[90px] bg-sidebar border-t border-sidebar-border px-3 md:px-4 flex items-center justify-between gap-4 z-50">
+        <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded bg-gradient-to-br from-green-600 to-green-800 flex-shrink-0 shadow-md" />
+          <div className="min-w-0">
+            <p className="font-bold text-xs md:text-sm text-foreground truncate">Available for Work</p>
+            <p className="text-xs text-muted-foreground truncate">Open to opportunities</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center gap-2 flex-1">
+          <div className="flex items-center gap-3 md:gap-4">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="w-7 h-7 md:w-8 md:h-8 text-muted-foreground hover:text-foreground hidden md:flex"
+              data-testid="button-previous"
+            >
+              <SkipBack className="w-4 h-4" />
+            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                size="icon"
+                className="rounded-full w-9 h-9 md:w-10 md:h-10 bg-foreground hover:bg-foreground/90 text-background transition-all shadow-md"
+                onClick={() => setIsPlaying(!isPlaying)}
+                data-testid="button-player-play"
+              >
+                {isPlaying ? (
+                  <Pause className="w-4 h-4 md:w-5 md:h-5 fill-current" />
+                ) : (
+                  <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
+                )}
+              </Button>
+            </motion.div>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="w-7 h-7 md:w-8 md:h-8 text-muted-foreground hover:text-foreground hidden md:flex"
+              data-testid="button-next"
+            >
+              <SkipForward className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="hidden md:flex items-center gap-3 flex-1 justify-end">
+          <Volume2 className="w-4 h-4 text-muted-foreground" />
+          <Slider
+            value={volume}
+            onValueChange={setVolume}
+            max={100}
+            step={1}
+            className="w-20 md:w-24"
+            data-testid="slider-volume"
+          />
+        </div>
+      </footer>
+    </div>
+  );
+}
