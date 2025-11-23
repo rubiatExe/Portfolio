@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Home as HomeIcon, 
   Search, 
@@ -19,19 +20,9 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-
-interface Skill {
-  name: string;
-  proficiency: string;
-  experience: string;
-}
-
-interface Project {
-  title: string;
-  subtitle: string;
-  gradient: string;
-  link?: string;
-}
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Profile, Skill, Project } from "@shared/schema";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -43,69 +34,36 @@ export default function Home() {
     ["rgba(7, 7, 7, 0)", "rgb(7, 7, 7)"]
   );
 
-  // Portfolio Data - Replace with your own information
-  const portfolioData = {
-    name: "Alex Developer",
-    role: "Full-Stack Developer",
-    monthlyListeners: "3,245,678",
-    bio: "Passionate full-stack developer with 5+ years of experience building scalable web applications. Specialized in React, Node.js, and cloud architecture. Always learning, always coding.",
-    education: "B.S. Computer Science, Stanford University",
-    
-    skills: [
-      { name: "React.js", proficiency: "Expert", experience: "5 yrs" },
-      { name: "TypeScript", proficiency: "Expert", experience: "4 yrs" },
-      { name: "Node.js", proficiency: "Advanced", experience: "5 yrs" },
-      { name: "Python", proficiency: "Advanced", experience: "4 yrs" },
-      { name: "PostgreSQL", proficiency: "Advanced", experience: "3 yrs" },
-      { name: "AWS/Cloud", proficiency: "Intermediate", experience: "3 yrs" },
-      { name: "Docker/K8s", proficiency: "Intermediate", experience: "2 yrs" },
-      { name: "GraphQL", proficiency: "Advanced", experience: "3 yrs" },
-    ] as Skill[],
-    
-    projects: [
-      {
-        title: "E-Commerce Platform",
-        subtitle: "React · Node.js · PostgreSQL · 2024",
-        gradient: "from-blue-600 to-blue-800",
-        link: "https://github.com"
-      },
-      {
-        title: "Real-time Analytics Dashboard",
-        subtitle: "Next.js · WebSockets · Redis · 2024",
-        gradient: "from-purple-600 to-purple-800",
-        link: "https://github.com"
-      },
-      {
-        title: "AI Content Generator",
-        subtitle: "Python · OpenAI · FastAPI · 2023",
-        gradient: "from-green-600 to-green-800",
-        link: "https://github.com"
-      },
-      {
-        title: "Mobile Fitness Tracker",
-        subtitle: "React Native · Firebase · 2023",
-        gradient: "from-red-600 to-red-800",
-        link: "https://github.com"
-      },
-      {
-        title: "SaaS Starter Kit",
-        subtitle: "Next.js · Stripe · Prisma · 2023",
-        gradient: "from-yellow-600 to-yellow-800",
-        link: "https://github.com"
-      },
-      {
-        title: "DevOps Automation Tool",
-        subtitle: "Go · Docker · Kubernetes · 2022",
-        gradient: "from-indigo-600 to-indigo-800",
-        link: "https://github.com"
-      },
-    ] as Project[],
-    
-    social: {
-      github: "https://github.com",
-      linkedin: "https://linkedin.com"
-    }
-  };
+  // Fetch portfolio data from API
+  const { data: profile, isLoading: profileLoading } = useQuery<Profile>({
+    queryKey: ["/api/profile"],
+  });
+
+  const { data: skills = [], isLoading: skillsLoading } = useQuery<Skill[]>({
+    queryKey: ["/api/skills"],
+  });
+
+  const { data: projects = [], isLoading: projectsLoading } = useQuery<Project[]>({
+    queryKey: ["/api/projects"],
+  });
+
+  // Track page view for analytics
+  useEffect(() => {
+    apiRequest("POST", "/api/analytics/pageview", { path: "/" }).catch(() => {});
+  }, []);
+
+  const isLoading = profileLoading || skillsLoading || projectsLoading;
+
+  if (isLoading || !profile) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="text-center space-y-4">
+          <Skeleton className="h-12 w-48 mx-auto bg-card" />
+          <Skeleton className="h-4 w-32 mx-auto bg-card" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-black">
@@ -144,7 +102,7 @@ export default function Home() {
             Connect
           </h3>
           <a
-            href={portfolioData.social.github}
+            href={profile.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-sidebar-foreground transition-all duration-200"
@@ -154,7 +112,7 @@ export default function Home() {
             <span className="font-semibold">GitHub</span>
           </a>
           <a
-            href={portfolioData.social.linkedin}
+            href={profile.linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 px-4 py-3 rounded-md hover-elevate active-elevate-2 text-sidebar-foreground transition-all duration-200"
@@ -175,12 +133,12 @@ export default function Home() {
         >
           <div className="flex items-center gap-4">
             <Avatar className="w-10 h-10 md:w-12 md:h-12 shadow-lg">
-              <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer" />
-              <AvatarFallback>AD</AvatarFallback>
+              <AvatarImage src={profile.avatarUrl} />
+              <AvatarFallback>{profile.name[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl md:text-2xl font-bold text-foreground truncate">{portfolioData.name}</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-foreground truncate">{profile.name}</h2>
                 <BadgeCheck className="w-4 h-4 md:w-5 md:h-5 text-blue-500 flex-shrink-0" />
               </div>
             </div>
@@ -199,8 +157,8 @@ export default function Home() {
                 className="relative mx-auto md:mx-0"
               >
                 <Avatar className="w-40 h-40 md:w-56 md:h-56 shadow-2xl border-2 border-background/20">
-                  <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer" />
-                  <AvatarFallback className="text-2xl md:text-4xl">AD</AvatarFallback>
+                  <AvatarImage src={profile.avatarUrl} />
+                  <AvatarFallback className="text-2xl md:text-4xl">{profile.name[0]}</AvatarFallback>
                 </Avatar>
               </motion.div>
               <motion.div
@@ -211,11 +169,11 @@ export default function Home() {
               >
                 <p className="text-sm font-bold mb-3 tracking-wide">Profile</p>
                 <div className="flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-3 mb-4">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-black">{portfolioData.name}</h1>
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-black">{profile.name}</h1>
                   <BadgeCheck className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
                 </div>
                 <p className="text-sm md:text-base text-muted-foreground">
-                  <span className="font-bold text-foreground">{portfolioData.monthlyListeners}</span> monthly listeners · {portfolioData.role}
+                  <span className="font-bold text-foreground">{profile.monthlyListeners}</span> monthly listeners · {profile.role}
                 </p>
               </motion.div>
             </div>
@@ -254,7 +212,7 @@ export default function Home() {
           <section className="px-4 md:px-8 py-6 md:py-8">
             <h2 className="text-2xl font-bold mb-6">Popular</h2>
             <div className="space-y-1">
-              {portfolioData.skills.map((skill, index) => (
+              {skills.map((skill, index) => (
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, x: -20 }}
@@ -287,7 +245,7 @@ export default function Home() {
               <p className="text-sm md:text-base text-muted-foreground">Featured projects and work</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-              {portfolioData.projects.map((project, index) => (
+              {projects.map((project, index) => (
                 <motion.div
                   key={project.title}
                   initial={{ opacity: 0, y: 20 }}
@@ -338,11 +296,11 @@ export default function Home() {
             <Card className="bg-card p-6 md:p-8 rounded-lg max-w-4xl">
               <h3 className="text-lg md:text-xl font-bold mb-4">Artist Bio</h3>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
-                {portfolioData.bio}
+                {profile.bio}
               </p>
               <div className="pt-4 border-t border-border">
                 <h4 className="font-bold mb-2 text-sm md:text-base">Education</h4>
-                <p className="text-sm md:text-base text-muted-foreground">{portfolioData.education}</p>
+                <p className="text-sm md:text-base text-muted-foreground">{profile.education}</p>
               </div>
             </Card>
           </section>
