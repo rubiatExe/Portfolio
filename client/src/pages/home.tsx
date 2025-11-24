@@ -377,17 +377,18 @@ export default function Home() {
       </main>
 
       {/* Bottom Player Bar */}
-      <footer className="fixed bottom-0 left-0 right-0 h-[80px] md:h-[90px] bg-sidebar border-t border-sidebar-border px-3 md:px-4 flex items-center justify-between gap-4 z-50">
+      {/* Bottom Player Bar */}
+      <footer className="fixed bottom-[60px] md:bottom-0 left-0 right-0 h-[64px] md:h-[90px] bg-sidebar/95 backdrop-blur-md border-t border-sidebar-border px-3 md:px-4 flex items-center justify-between gap-4 z-50 transition-all duration-300">
         <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-          <div className="w-12 h-12 md:w-14 md:h-14 rounded bg-gradient-to-br from-green-600 to-green-800 flex-shrink-0 shadow-md" />
+          <div className="w-10 h-10 md:w-14 md:h-14 rounded bg-gradient-to-br from-green-600 to-green-800 flex-shrink-0 shadow-md" />
           <div className="min-w-0">
             <p className="font-bold text-xs md:text-sm text-foreground truncate">Available for Work</p>
-            <p className="text-xs text-muted-foreground truncate">Open to opportunities</p>
+            <p className="text-[10px] md:text-xs text-muted-foreground truncate">Open to opportunities</p>
           </div>
         </div>
 
         <div className="flex flex-col items-center gap-2 flex-1">
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-3 md:gap-4 justify-end md:justify-center w-full">
             <Button
               size="icon"
               variant="ghost"
@@ -399,7 +400,7 @@ export default function Home() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="icon"
-                className="rounded-full w-9 h-9 md:w-10 md:h-10 bg-foreground hover:bg-foreground/90 text-background transition-all shadow-md"
+                className="rounded-full w-8 h-8 md:w-10 md:h-10 bg-foreground hover:bg-foreground/90 text-background transition-all shadow-md"
                 onClick={togglePlayPause}
                 data-testid="button-player-play"
               >
@@ -433,6 +434,22 @@ export default function Home() {
           />
         </div>
       </footer>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[60px] bg-black/95 backdrop-blur-lg border-t border-white/10 flex items-center justify-around z-50 pb-safe">
+        <div className="flex flex-col items-center justify-center gap-1 text-foreground">
+          <HomeIcon className="w-6 h-6" />
+          <span className="text-[10px] font-medium">Home</span>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+          <Search className="w-6 h-6" />
+          <span className="text-[10px] font-medium">Resume</span>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+          <Library className="w-6 h-6" />
+          <span className="text-[10px] font-medium">Projects</span>
+        </div>
+      </nav>
 
       {/* Hidden Audio Player */}
       <audio
