@@ -34,7 +34,7 @@ export default function Admin() {
 
   // Delete skill
   const deleteSkillMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("DELETE", `/api/skills/${id}`, {}),
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/skills/${id}`, {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/skills"] });
       toast({ title: "Skill deleted" });
@@ -43,7 +43,7 @@ export default function Admin() {
 
   // Delete project
   const deleteProjectMutation = useMutation({
-    mutationFn: (id: string) => apiRequest("DELETE", `/api/projects/${id}`, {}),
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/projects/${id}`, {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
       toast({ title: "Project deleted" });
