@@ -210,7 +210,7 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto">
           {/* Hero Section */}
           <section className="relative min-h-[340px] md:h-[400px] flex items-end p-4 md:p-8 bg-gradient-to-b from-indigo-900 via-purple-900 to-background">
-            <div className="flex flex-col md:flex-row items-end md:items-end gap-6 w-full">
+            <div className="flex flex-col md:flex-row items-center md:items-end gap-6 w-full">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
