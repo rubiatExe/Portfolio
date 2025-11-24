@@ -127,7 +127,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-black">
+    <div className="flex h-[100dvh] w-full overflow-hidden bg-black">
       {/* Left Sidebar - Hidden on mobile */}
       <aside className="hidden md:flex w-[280px] bg-sidebar flex-col p-6 gap-6">
         <div className="flex flex-col gap-4">
@@ -360,7 +360,7 @@ export default function Home() {
           </section>
 
           {/* About Section */}
-          <section className="px-4 md:px-8 py-8 md:py-12 pb-48 md:pb-40">
+          <section className="px-4 md:px-8 py-8 md:py-12 pb-64 md:pb-40">
             <h2 className="text-2xl font-bold mb-6">About</h2>
             <Card className="bg-card p-6 md:p-8 rounded-lg max-w-4xl">
               <h3 className="text-lg md:text-xl font-bold mb-4">Artist Bio</h3>
