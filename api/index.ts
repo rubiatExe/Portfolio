@@ -1,5 +1,5 @@
-import { app } from "../server/app";
-import { registerRoutes } from "../server/routes";
+import { app } from "../server/app.ts";
+import { registerRoutes } from "../server/routes.ts";
 
 // We need to ensure routes are registered only once
 let routesRegistered = false;

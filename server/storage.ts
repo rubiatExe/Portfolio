@@ -1,7 +1,7 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import * as schema from "@shared/schema";
+import * as schema from "../shared/schema";
 import type {
   User,
   InsertUser,
@@ -17,7 +17,7 @@ import type {
   InsertContact,
   PageView,
   InsertPageView,
-} from "@shared/schema";
+} from "../shared/schema";
 
 export interface IStorage {
   // User methods

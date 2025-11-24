@@ -8,7 +8,7 @@ import {
   insertBlogPostSchema,
   insertContactSchema,
   insertPageViewSchema,
-} from "@shared/schema";
+} from "../shared/schema";
 import { fromZodError } from "zod-validation-error";
 
 export async function registerRoutes(app: Express): Promise<Server> {
