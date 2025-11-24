@@ -1,15 +1,15 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { pgTable, varchar, text, timestamp, boolean, serial } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: varchar("username", { length: 255 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
 });
 
-export const profile = sqliteTable("profile", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const profile = pgTable("profile", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   role: text("role").notNull(),
   monthlyListeners: text("monthly_listeners").notNull(),
@@ -18,50 +18,50 @@ export const profile = sqliteTable("profile", {
   githubUrl: text("github_url").notNull(),
   linkedinUrl: text("linkedin_url").notNull(),
   avatarUrl: text("avatar_url").notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date()),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const skills = sqliteTable("skills", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const skills = pgTable("skills", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   proficiency: text("proficiency").notNull(),
   experience: text("experience").notNull(),
-  order: integer("order").notNull().default(0),
+  order: serial("order").notNull().default(0),
 });
 
-export const projects = sqliteTable("projects", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const projects = pgTable("projects", {
+  id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
   gradient: text("gradient").notNull(),
   imageUrl: text("image_url"),
   link: text("link"),
-  order: integer("order").notNull().default(0),
+  order: serial("order").default(0),
 });
 
-export const blogPosts = sqliteTable("blog_posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
   content: text("content").notNull(),
   coverGradient: text("cover_gradient").notNull(),
-  published: integer("published", { mode: "boolean" }).default(false).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date()),
+  published: boolean("published").default(false).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const contactSubmissions = sqliteTable("contact_submissions", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const contactSubmissions = pgTable("contact_submissions", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   message: text("message").notNull(),
-  submittedAt: integer("submitted_at", { mode: "timestamp" }).notNull().default(new Date()),
+  submittedAt: timestamp("submitted_at").notNull().defaultNow(),
 });
 
-export const pageViews = sqliteTable("page_views", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
   path: text("path").notNull(),
-  timestamp: integer("timestamp", { mode: "timestamp" }).notNull().default(new Date()),
+  timestamp: timestamp("timestamp").notNull().defaultNow(),
 });
 
 // Insert schemas

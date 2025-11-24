@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+import { sql } from "@vercel/postgres";
 import * as schema from "@shared/schema";
 import type {
   User,
@@ -59,8 +59,7 @@ export interface IStorage {
   getPageViews(startDate?: Date, endDate?: Date): Promise<PageView[]>;
 }
 
-const sqlite = new Database("sqlite.db");
-const db = drizzle(sqlite, { schema });
+const db = drizzle(sql, { schema });
 
 export class DbStorage implements IStorage {
   // User methods
