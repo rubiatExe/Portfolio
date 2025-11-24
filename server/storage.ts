@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/vercel-postgres";
-import { sql } from "@vercel/postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
 import * as schema from "@shared/schema";
 import type {
   User,
@@ -59,7 +59,11 @@ export interface IStorage {
   getPageViews(startDate?: Date, endDate?: Date): Promise<PageView[]>;
 }
 
-const db = drizzle(sql, { schema });
+const pool = new pg.Pool({
+  connectionString: process.env.POSTGRES_URL,
+});
+
+const db = drizzle(pool, { schema });
 
 export class DbStorage implements IStorage {
   // User methods

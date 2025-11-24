@@ -8,3 +8,4 @@ sqlite.db
 .local/
 debug_db.ts
 migrations/
+.vercel

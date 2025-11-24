@@ -1,4 +1,4 @@
-import { pgTable, varchar, text, timestamp, boolean, serial } from "drizzle-orm/pg-core";
+import { pgTable, varchar, text, timestamp, boolean, serial, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -26,7 +26,7 @@ export const skills = pgTable("skills", {
   name: text("name").notNull(),
   proficiency: text("proficiency").notNull(),
   experience: text("experience").notNull(),
-  order: serial("order").notNull().default(0),
+  order: integer("order").notNull().default(0),
 });
 
 export const projects = pgTable("projects", {
@@ -36,7 +36,7 @@ export const projects = pgTable("projects", {
   gradient: text("gradient").notNull(),
   imageUrl: text("image_url"),
   link: text("link"),
-  order: serial("order").default(0),
+  order: integer("order").default(0),
 });
 
 export const blogPosts = pgTable("blog_posts", {
