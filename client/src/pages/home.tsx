@@ -229,7 +229,7 @@ export default function Home() {
                 className="flex-1 pb-6 text-center md:text-left"
               >
                 <p className="text-sm font-bold mb-3 tracking-wide">Profile</p>
-                <div className="flex flex-col md:flex-row items-center md:items-center gap-2 md:gap-3 mb-4">
+                <div className="flex flex-row items-center justify-center md:justify-start gap-2 md:gap-3 mb-4">
                   <h1 className="text-4xl md:text-6xl lg:text-7xl font-black">{profile.name}</h1>
                   <BadgeCheck className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
                 </div>
@@ -360,7 +360,7 @@ export default function Home() {
           </section>
 
           {/* About Section */}
-          <section className="px-4 md:px-8 py-8 md:py-12 pb-32 md:pb-40">
+          <section className="px-4 md:px-8 py-8 md:py-12 pb-48 md:pb-40">
             <h2 className="text-2xl font-bold mb-6">About</h2>
             <Card className="bg-card p-6 md:p-8 rounded-lg max-w-4xl">
               <h3 className="text-lg md:text-xl font-bold mb-4">Artist Bio</h3>
