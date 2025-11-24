@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Home as HomeIcon, 
-  Search, 
-  Library, 
-  Github, 
+import {
+  Home as HomeIcon,
+  Search,
+  Library,
+  Github,
   Linkedin,
   Play,
   Pause,
@@ -27,12 +27,73 @@ import { apiRequest } from "@/lib/queryClient";
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState([75]);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
   const { scrollY } = useScroll();
   const headerBg = useTransform(
     scrollY,
     [0, 100],
     ["rgba(7, 7, 7, 0)", "rgb(7, 7, 7)"]
   );
+
+  // Initialize audio and attempt autoplay
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume[0] / 100;
+
+      // Set start time once audio metadata is loaded
+      const handleLoadedMetadata = () => {
+        if (audioRef.current) {
+          audioRef.current.currentTime = 35; // Start at 35 seconds
+        }
+      };
+
+      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+      // Attempt to autoplay - browsers require user interaction
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(() => {
+            // Autoplay was prevented, user needs to click play
+            setIsPlaying(false);
+          });
+      }
+
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        }
+      };
+    }
+  }, []);
+
+  // Handle play/pause toggle
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        // If at the beginning, start at 35 seconds
+        if (audioRef.current.currentTime < 1) {
+          audioRef.current.currentTime = 35;
+        }
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  // Handle volume change
+  const handleVolumeChange = (newVolume: number[]) => {
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume[0] / 100;
+    }
+  };
 
   // Fetch portfolio data from API
   const { data: profile, isLoading: profileLoading } = useQuery<Profile>({
@@ -49,7 +110,7 @@ export default function Home() {
 
   // Track page view for analytics
   useEffect(() => {
-    apiRequest("POST", "/api/analytics/pageview", { path: "/" }).catch(() => {});
+    apiRequest("POST", "/api/analytics/pageview", { path: "/" }).catch(() => { });
   }, []);
 
   const isLoading = profileLoading || skillsLoading || projectsLoading;
@@ -84,7 +145,7 @@ export default function Home() {
             data-testid="nav-search"
           >
             <Search className="w-6 h-6" />
-            <span className="font-bold text-base">Search</span>
+            <span className="font-bold text-base">Resume</span>
           </Button>
           <Button
             variant="ghost"
@@ -92,7 +153,7 @@ export default function Home() {
             data-testid="nav-library"
           >
             <Library className="w-6 h-6" />
-            <span className="font-bold text-base">Your Library</span>
+            <span className="font-bold text-base">Projects</span>
           </Button>
         </div>
 
@@ -185,7 +246,7 @@ export default function Home() {
               <Button
                 size="lg"
                 className="rounded-full w-14 h-14 p-0 bg-primary hover:bg-primary shadow-lg hover:shadow-xl transition-all"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={togglePlayPause}
                 data-testid="button-play"
               >
                 {isPlaying ? (
@@ -255,7 +316,15 @@ export default function Home() {
                 >
                   <Card className="group bg-card p-3 md:p-4 rounded-lg transition-all duration-300 hover:bg-card-hover cursor-pointer">
                     <div className="relative mb-3 md:mb-4 overflow-visible">
-                      <div className={`aspect-square rounded-md bg-gradient-to-br ${project.gradient} shadow-lg`} />
+                      {project.imageUrl ? (
+                        <img
+                          src={project.imageUrl}
+                          alt={project.title}
+                          className="aspect-square rounded-md object-cover shadow-lg w-full"
+                        />
+                      ) : (
+                        <div className={`aspect-square rounded-md bg-gradient-to-br ${project.gradient} shadow-lg`} />
+                      )}
                       <div className="absolute bottom-2 right-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                         <Button
                           size="icon"
@@ -331,7 +400,7 @@ export default function Home() {
               <Button
                 size="icon"
                 className="rounded-full w-9 h-9 md:w-10 md:h-10 bg-foreground hover:bg-foreground/90 text-background transition-all shadow-md"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={togglePlayPause}
                 data-testid="button-player-play"
               >
                 {isPlaying ? (
@@ -356,7 +425,7 @@ export default function Home() {
           <Volume2 className="w-4 h-4 text-muted-foreground" />
           <Slider
             value={volume}
-            onValueChange={setVolume}
+            onValueChange={handleVolumeChange}
             max={100}
             step={1}
             className="w-20 md:w-24"
@@ -364,6 +433,14 @@ export default function Home() {
           />
         </div>
       </footer>
+
+      {/* Hidden Audio Player */}
+      <audio
+        ref={audioRef}
+        src="/Ricky_Astley_-_Never_Gonna_Give_You_Up_(mp3.pm).mp3"
+        loop
+        preload="auto"
+      />
     </div>
   );
 }

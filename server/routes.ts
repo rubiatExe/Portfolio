@@ -60,7 +60,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/skills/:id", async (req, res) => {
     try {
-      const skill = await storage.updateSkill(req.params.id, req.body);
+      const id = parseInt(req.params.id);
+      const skill = await storage.updateSkill(id, req.body);
       res.json(skill);
     } catch (error) {
       res.status(500).json({ error: "Failed to update skill" });
@@ -69,7 +70,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/skills/:id", async (req, res) => {
     try {
-      await storage.deleteSkill(req.params.id);
+      const id = parseInt(req.params.id);
+      await storage.deleteSkill(id);
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete skill" });
@@ -101,7 +103,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/projects/:id", async (req, res) => {
     try {
-      const project = await storage.updateProject(req.params.id, req.body);
+      const id = parseInt(req.params.id);
+      const project = await storage.updateProject(id, req.body);
       res.json(project);
     } catch (error) {
       res.status(500).json({ error: "Failed to update project" });
@@ -110,7 +113,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/projects/:id", async (req, res) => {
     try {
-      await storage.deleteProject(req.params.id);
+      const id = parseInt(req.params.id);
+      await storage.deleteProject(id);
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete project" });
@@ -130,7 +134,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/blog/:id", async (req, res) => {
     try {
-      const post = await storage.getBlogPost(req.params.id);
+      const id = parseInt(req.params.id);
+      const post = await storage.getBlogPost(id);
       if (!post) {
         return res.status(404).json({ error: "Blog post not found" });
       }
@@ -155,7 +160,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/blog/:id", async (req, res) => {
     try {
-      const post = await storage.updateBlogPost(req.params.id, req.body);
+      const id = parseInt(req.params.id);
+      const post = await storage.updateBlogPost(id, req.body);
       res.json(post);
     } catch (error) {
       res.status(500).json({ error: "Failed to update blog post" });
@@ -164,7 +170,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/blog/:id", async (req, res) => {
     try {
-      await storage.deleteBlogPost(req.params.id);
+      const id = parseInt(req.params.id);
+      await storage.deleteBlogPost(id);
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete blog post" });

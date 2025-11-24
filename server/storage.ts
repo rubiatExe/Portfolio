@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { Pool, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
 import * as schema from "@shared/schema";
 import type {
   User,
@@ -21,7 +21,7 @@ import type {
 
 export interface IStorage {
   // User methods
-  getUser(id: string): Promise<User | undefined>;
+  getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
 
@@ -32,21 +32,23 @@ export interface IStorage {
   // Skills methods
   getSkills(): Promise<Skill[]>;
   createSkill(skill: InsertSkill): Promise<Skill>;
-  updateSkill(id: string, skill: Partial<InsertSkill>): Promise<Skill>;
-  deleteSkill(id: string): Promise<void>;
+  updateSkill(id: number, skill: Partial<InsertSkill>): Promise<Skill>;
+  deleteSkill(id: number): Promise<void>;
+  clearSkills(): Promise<void>;
 
   // Projects methods
   getProjects(): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
-  updateProject(id: string, project: Partial<InsertProject>): Promise<Project>;
-  deleteProject(id: string): Promise<void>;
+  updateProject(id: number, project: Partial<InsertProject>): Promise<Project>;
+  deleteProject(id: number): Promise<void>;
+  clearProjects(): Promise<void>;
 
   // Blog methods
   getBlogPosts(publishedOnly?: boolean): Promise<BlogPost[]>;
-  getBlogPost(id: string): Promise<BlogPost | undefined>;
+  getBlogPost(id: number): Promise<BlogPost | undefined>;
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
-  updateBlogPost(id: string, post: Partial<InsertBlogPost>): Promise<BlogPost>;
-  deleteBlogPost(id: string): Promise<void>;
+  updateBlogPost(id: number, post: Partial<InsertBlogPost>): Promise<BlogPost>;
+  deleteBlogPost(id: number): Promise<void>;
 
   // Contact methods
   createContactSubmission(contact: InsertContact): Promise<ContactSubmission>;
@@ -57,14 +59,12 @@ export interface IStorage {
   getPageViews(startDate?: Date, endDate?: Date): Promise<PageView[]>;
 }
 
-neonConfig.poolQueryViaFetch = true;
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const db = drizzle(pool, { schema });
+const sqlite = new Database("sqlite.db");
+const db = drizzle(sqlite, { schema });
 
 export class DbStorage implements IStorage {
   // User methods
-  async getUser(id: string): Promise<User | undefined> {
+  async getUser(id: number): Promise<User | undefined> {
     const result = await db.select().from(schema.users).where(eq(schema.users.id, id));
     return result[0];
   }
@@ -110,7 +110,7 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async updateSkill(id: string, skillData: Partial<InsertSkill>): Promise<Skill> {
+  async updateSkill(id: number, skillData: Partial<InsertSkill>): Promise<Skill> {
     const result = await db
       .update(schema.skills)
       .set(skillData)
@@ -119,8 +119,12 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async deleteSkill(id: string): Promise<void> {
+  async deleteSkill(id: number): Promise<void> {
     await db.delete(schema.skills).where(eq(schema.skills.id, id));
+  }
+
+  async clearSkills(): Promise<void> {
+    await db.delete(schema.skills);
   }
 
   // Projects methods
@@ -133,7 +137,7 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async updateProject(id: string, projectData: Partial<InsertProject>): Promise<Project> {
+  async updateProject(id: number, projectData: Partial<InsertProject>): Promise<Project> {
     const result = await db
       .update(schema.projects)
       .set(projectData)
@@ -142,8 +146,12 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async deleteProject(id: string): Promise<void> {
+  async deleteProject(id: number): Promise<void> {
     await db.delete(schema.projects).where(eq(schema.projects.id, id));
+  }
+
+  async clearProjects(): Promise<void> {
+    await db.delete(schema.projects);
   }
 
   // Blog methods
@@ -158,7 +166,7 @@ export class DbStorage implements IStorage {
     return db.select().from(schema.blogPosts).orderBy(desc(schema.blogPosts.createdAt));
   }
 
-  async getBlogPost(id: string): Promise<BlogPost | undefined> {
+  async getBlogPost(id: number): Promise<BlogPost | undefined> {
     const result = await db.select().from(schema.blogPosts).where(eq(schema.blogPosts.id, id));
     return result[0];
   }
@@ -168,7 +176,7 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async updateBlogPost(id: string, postData: Partial<InsertBlogPost>): Promise<BlogPost> {
+  async updateBlogPost(id: number, postData: Partial<InsertBlogPost>): Promise<BlogPost> {
     const result = await db
       .update(schema.blogPosts)
       .set({ ...postData, updatedAt: new Date() })
@@ -177,7 +185,7 @@ export class DbStorage implements IStorage {
     return result[0];
   }
 
-  async deleteBlogPost(id: string): Promise<void> {
+  async deleteBlogPost(id: number): Promise<void> {
     await db.delete(schema.blogPosts).where(eq(schema.blogPosts.id, id));
   }
 

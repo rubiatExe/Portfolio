@@ -6,14 +6,14 @@ async function seed() {
 
   // Seed profile
   const profileData: InsertProfile = {
-    name: "Alex Developer",
-    role: "Full-Stack Developer",
-    monthlyListeners: "3,245,678",
-    bio: "Passionate full-stack developer with 5+ years of experience building scalable web applications. Specialized in React, Node.js, and cloud architecture. Always learning, always coding.",
-    education: "B.S. Computer Science, Stanford University",
-    githubUrl: "https://github.com",
-    linkedinUrl: "https://linkedin.com",
-    avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer",
+    name: "Rubiat Bin Faisal",
+    role: "Software Engineer",
+    monthlyListeners: "500,000+", // Artistic license for "views/impact"
+    bio: "Results-driven Software Engineer with experience in leading small teams and shipping end-to-end products in startup environments. Specialized in Full-Stack Development, React, Node.js, and Python.",
+    education: "Bachelor’s in Computer Science, Lehigh University",
+    githubUrl: "https://github.com/rubiatExe",
+    linkedinUrl: "https://www.linkedin.com/in/rubiat-bin-faisal/",
+    avatarUrl: "/profile_cartoon.png",
   };
 
   try {
@@ -23,19 +23,21 @@ async function seed() {
     console.error("Error seeding profile:", error);
   }
 
-  // Seed skills
+  // Clear and Seed skills
   const skillsData: InsertSkill[] = [
-    { name: "React.js", proficiency: "Expert", experience: "5 yrs", order: 0 },
-    { name: "TypeScript", proficiency: "Expert", experience: "4 yrs", order: 1 },
-    { name: "Node.js", proficiency: "Advanced", experience: "5 yrs", order: 2 },
-    { name: "Python", proficiency: "Advanced", experience: "4 yrs", order: 3 },
-    { name: "PostgreSQL", proficiency: "Advanced", experience: "3 yrs", order: 4 },
-    { name: "AWS/Cloud", proficiency: "Intermediate", experience: "3 yrs", order: 5 },
-    { name: "Docker/K8s", proficiency: "Intermediate", experience: "2 yrs", order: 6 },
-    { name: "GraphQL", proficiency: "Advanced", experience: "3 yrs", order: 7 },
+    { name: "TypeScript", proficiency: "Expert", experience: "3 yrs", order: 0 },
+    { name: "JavaScript", proficiency: "Expert", experience: "4 yrs", order: 1 },
+    { name: "ReactJS", proficiency: "Expert", experience: "3 yrs", order: 2 },
+    { name: "Node.js", proficiency: "Advanced", experience: "3 yrs", order: 3 },
+    { name: "Python", proficiency: "Advanced", experience: "3 yrs", order: 4 },
+    { name: "Next.js", proficiency: "Advanced", experience: "2 yrs", order: 5 },
+    { name: "SQL/PostgreSQL", proficiency: "Intermediate", experience: "2 yrs", order: 6 },
+    { name: "AWS", proficiency: "Intermediate", experience: "1 yr", order: 7 },
   ];
 
   try {
+    await storage.clearSkills();
+    console.log("✓ Cleared existing skills");
     for (const skill of skillsData) {
       await storage.createSkill(skill);
     }
@@ -44,53 +46,45 @@ async function seed() {
     console.error("Error seeding skills:", error);
   }
 
-  // Seed projects
+  // Clear and Seed projects
   const projectsData: InsertProject[] = [
     {
-      title: "E-Commerce Platform",
-      subtitle: "React · Node.js · PostgreSQL · 2024",
-      gradient: "from-blue-600 to-blue-800",
-      link: "https://github.com",
+      title: "Managify",
+      subtitle: "Next.js · TypeScript · PostgreSQL · AI",
+      gradient: "from-blue-600 to-cyan-600",
+      imageUrl: "/project_managify.png",
+      link: "https://managii.vercel.app",
       order: 0,
     },
     {
-      title: "Real-time Analytics Dashboard",
-      subtitle: "Next.js · WebSockets · Redis · 2024",
-      gradient: "from-purple-600 to-purple-800",
-      link: "https://github.com",
+      title: "Mentessa Integration",
+      subtitle: "React · Slack API · OpenAI GPT-3.5",
+      gradient: "from-purple-600 to-pink-600",
+      imageUrl: "/project_mentessa.png",
+      link: "https://www.mentessa.com", // Assuming company site
       order: 1,
     },
     {
-      title: "AI Content Generator",
-      subtitle: "Python · OpenAI · FastAPI · 2023",
-      gradient: "from-green-600 to-green-800",
-      link: "https://github.com",
+      title: "Save Tuba",
+      subtitle: "Android · Java · RESTful APIs",
+      gradient: "from-green-600 to-emerald-600",
+      imageUrl: "/project_savetuba.png",
+      link: "#",
       order: 2,
     },
     {
-      title: "Mobile Fitness Tracker",
-      subtitle: "React Native · Firebase · 2023",
-      gradient: "from-red-600 to-red-800",
-      link: "https://github.com",
+      title: "VR Learning Experience",
+      subtitle: "C# · Unity Engine · VR",
+      gradient: "from-orange-600 to-red-600",
+      imageUrl: "/project_vr.png",
+      link: "#",
       order: 3,
-    },
-    {
-      title: "SaaS Starter Kit",
-      subtitle: "Next.js · Stripe · Prisma · 2023",
-      gradient: "from-yellow-600 to-yellow-800",
-      link: "https://github.com",
-      order: 4,
-    },
-    {
-      title: "DevOps Automation Tool",
-      subtitle: "Go · Docker · Kubernetes · 2022",
-      gradient: "from-indigo-600 to-indigo-800",
-      link: "https://github.com",
-      order: 5,
     },
   ];
 
   try {
+    await storage.clearProjects();
+    console.log("✓ Cleared existing projects");
     for (const project of projectsData) {
       await storage.createProject(project);
     }

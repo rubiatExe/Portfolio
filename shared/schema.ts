@@ -1,16 +1,15 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
 });
 
-export const profile = pgTable("profile", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const profile = sqliteTable("profile", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   role: text("role").notNull(),
   monthlyListeners: text("monthly_listeners").notNull(),
@@ -19,49 +18,50 @@ export const profile = pgTable("profile", {
   githubUrl: text("github_url").notNull(),
   linkedinUrl: text("linkedin_url").notNull(),
   avatarUrl: text("avatar_url").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date()),
 });
 
-export const skills = pgTable("skills", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const skills = sqliteTable("skills", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   proficiency: text("proficiency").notNull(),
   experience: text("experience").notNull(),
   order: integer("order").notNull().default(0),
 });
 
-export const projects = pgTable("projects", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const projects = sqliteTable("projects", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
   gradient: text("gradient").notNull(),
+  imageUrl: text("image_url"),
   link: text("link"),
   order: integer("order").notNull().default(0),
 });
 
-export const blogPosts = pgTable("blog_posts", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const blogPosts = sqliteTable("blog_posts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   subtitle: text("subtitle").notNull(),
   content: text("content").notNull(),
   coverGradient: text("cover_gradient").notNull(),
-  published: boolean("published").default(false).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  published: integer("published", { mode: "boolean" }).default(false).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(new Date()),
 });
 
-export const contactSubmissions = pgTable("contact_submissions", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const contactSubmissions = sqliteTable("contact_submissions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   email: text("email").notNull(),
   message: text("message").notNull(),
-  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  submittedAt: integer("submitted_at", { mode: "timestamp" }).notNull().default(new Date()),
 });
 
-export const pageViews = pgTable("page_views", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+export const pageViews = sqliteTable("page_views", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   path: text("path").notNull(),
-  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull().default(new Date()),
 });
 
 // Insert schemas
