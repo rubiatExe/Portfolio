@@ -14,7 +14,11 @@ import {
   Volume2,
   BadgeCheck,
   Heart,
-  ExternalLink
+  ExternalLink,
+  Code2,
+  Database,
+  Cloud,
+  Boxes
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -23,6 +27,18 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Profile, Skill, Project } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+
+// Icon mapping for skills
+const skillIcons: Record<string, React.ReactNode> = {
+  "TypeScript": <Code2 className="w-5 h-5 text-blue-500" />,
+  "JavaScript": <Code2 className="w-5 h-5 text-yellow-500" />,
+  "ReactJS": <Boxes className="w-5 h-5 text-cyan-400" />,
+  "Node.js": <Code2 className="w-5 h-5 text-green-500" />,
+  "Python": <Code2 className="w-5 h-5 text-blue-400" />,
+  "Next.js": <Boxes className="w-5 h-5 text-white" />,
+  "SQL/PostgreSQL": <Database className="w-5 h-5 text-blue-600" />,
+  "AWS": <Cloud className="w-5 h-5 text-orange-500" />,
+};
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -279,11 +295,14 @@ export default function Home() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto_auto] gap-2 md:gap-4 items-center px-3 md:px-4 py-3 rounded-md hover:bg-card-hover transition-colors group cursor-pointer"
+                  className="grid grid-cols-[auto_auto_1fr_auto] md:grid-cols-[auto_auto_1fr_auto_auto] gap-2 md:gap-4 items-center px-3 md:px-4 py-3 rounded-md hover:bg-card-hover transition-colors group cursor-pointer"
                   data-testid={`skill-${index}`}
                 >
                   <div className="w-6 text-right text-muted-foreground group-hover:text-foreground transition-colors text-sm md:text-base">
                     {index + 1}
+                  </div>
+                  <div className="flex-shrink-0">
+                    {skillIcons[skill.name] || <Code2 className="w-5 h-5 text-muted-foreground" />}
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm md:text-base">{skill.name}</p>
