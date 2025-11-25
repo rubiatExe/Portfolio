@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import {
   Home as HomeIcon,
   Search,
@@ -155,14 +156,16 @@ export default function Home() {
             <HomeIcon className="w-6 h-6" />
             <span className="font-bold text-base">Home</span>
           </Button>
-          <Button
-            variant="ghost"
-            className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4"
-            data-testid="nav-search"
-          >
-            <Search className="w-6 h-6" />
-            <span className="font-bold text-base">Resume</span>
-          </Button>
+          <Link href="/resume">
+            <Button
+              variant="ghost"
+              className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
+              data-testid="nav-search"
+            >
+              <Search className="w-6 h-6" />
+              <span className="font-bold text-base">Resume</span>
+            </Button>
+          </Link>
           <Button
             variant="ghost"
             className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4"
@@ -460,10 +463,10 @@ export default function Home() {
           <HomeIcon className="w-6 h-6" />
           <span className="text-[10px] font-medium">Home</span>
         </div>
-        <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+        <Link href="/resume" className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
           <Search className="w-6 h-6" />
           <span className="text-[10px] font-medium">Resume</span>
-        </div>
+        </Link>
         <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
           <Library className="w-6 h-6" />
           <span className="text-[10px] font-medium">Projects</span>
