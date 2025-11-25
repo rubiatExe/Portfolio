@@ -166,14 +166,16 @@ export default function Home() {
               <span className="font-bold text-base">Resume</span>
             </Button>
           </Link>
-          <Button
-            variant="ghost"
-            className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4"
-            data-testid="nav-library"
-          >
-            <Library className="w-6 h-6" />
-            <span className="font-bold text-base">Projects</span>
-          </Button>
+          <Link href="/projects">
+            <Button
+              variant="ghost"
+              className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
+              data-testid="nav-library"
+            >
+              <Library className="w-6 h-6" />
+              <span className="font-bold text-base">Projects</span>
+            </Button>
+          </Link>
         </div>
 
         {/* Connect Section */}
@@ -467,10 +469,10 @@ export default function Home() {
           <Search className="w-6 h-6" />
           <span className="text-[10px] font-medium">Resume</span>
         </Link>
-        <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+        <Link href="/projects" className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
           <Library className="w-6 h-6" />
           <span className="text-[10px] font-medium">Projects</span>
-        </div>
+        </Link>
       </nav>
 
       {/* Hidden Audio Player */}
