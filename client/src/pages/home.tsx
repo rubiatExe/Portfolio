@@ -159,7 +159,7 @@ export default function Home() {
           <Link href="/resume">
             <Button
               variant="ghost"
-              className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
+              className="justify-start gap-4 text-sidebar-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
               data-testid="nav-search"
             >
               <Search className="w-6 h-6" />
@@ -169,7 +169,7 @@ export default function Home() {
           <Link href="/projects">
             <Button
               variant="ghost"
-              className="justify-start gap-4 text-muted-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
+              className="justify-start gap-4 text-sidebar-foreground hover:text-sidebar-foreground h-10 px-4 w-full"
               data-testid="nav-library"
             >
               <Library className="w-6 h-6" />
@@ -283,9 +283,12 @@ export default function Home() {
                 size="lg"
                 className="rounded-full border-2 border-muted-foreground/30 text-foreground hover:text-foreground hover:border-foreground transition-all"
                 data-testid="button-follow"
+                asChild
               >
-                <Heart className="w-5 h-5 mr-2" />
-                <span className="font-bold">Follow</span>
+                <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                  <Heart className="w-5 h-5 mr-2" />
+                  <span className="font-bold">Follow</span>
+                </a>
               </Button>
             </motion.div>
           </div>
@@ -465,11 +468,11 @@ export default function Home() {
           <HomeIcon className="w-6 h-6" />
           <span className="text-[10px] font-medium">Home</span>
         </div>
-        <Link href="/resume" className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+        <Link href="/resume" className="flex flex-col items-center justify-center gap-1 text-foreground">
           <Search className="w-6 h-6" />
           <span className="text-[10px] font-medium">Resume</span>
         </Link>
-        <Link href="/projects" className="flex flex-col items-center justify-center gap-1 text-muted-foreground">
+        <Link href="/projects" className="flex flex-col items-center justify-center gap-1 text-foreground">
           <Library className="w-6 h-6" />
           <span className="text-[10px] font-medium">Projects</span>
         </Link>
