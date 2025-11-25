@@ -49,34 +49,34 @@ async function seed() {
   // Clear and Seed projects
   const projectsData: InsertProject[] = [
     {
-      title: "Managify",
-      subtitle: "Next.js · TypeScript · PostgreSQL · AI",
+      title: "Managii",
+      subtitle: "Next.js · TypeScript · PostgreSQL · AI · Tailwind CSS",
       gradient: "from-blue-600 to-cyan-600",
       imageUrl: "/project_managify.png",
-      link: "https://managii.vercel.app",
+      link: "https://github.com/rubiatExe/Managii",
       order: 0,
+    },
+    {
+      title: "WanderWise",
+      subtitle: "Next.js · TypeScript · Google Cloud · Machine Learning",
+      gradient: "from-green-600 to-emerald-600",
+      imageUrl: "/project_wanderwise.png",
+      link: "https://github.com/rubiatExe/WanderWise",
+      order: 1,
     },
     {
       title: "Mentessa Integration",
       subtitle: "React · Slack API · OpenAI GPT-3.5",
       gradient: "from-purple-600 to-pink-600",
       imageUrl: "/project_mentessa.png",
-      link: "https://www.mentessa.com", // Assuming company site
-      order: 1,
+      link: "https://www.mentessa.com",
+      order: 2,
     },
     {
       title: "Save Tuba",
       subtitle: "Android · Java · RESTful APIs",
-      gradient: "from-green-600 to-emerald-600",
+      gradient: "from-orange-600 to-amber-600",
       imageUrl: "/project_savetuba.png",
-      link: "#",
-      order: 2,
-    },
-    {
-      title: "VR Learning Experience",
-      subtitle: "C# · Unity Engine · VR",
-      gradient: "from-orange-600 to-red-600",
-      imageUrl: "/project_vr.png",
       link: "#",
       order: 3,
     },
