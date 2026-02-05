@@ -45,46 +45,46 @@ export default function Projects() {
                                 transition={{ duration: 0.4, delay: index * 0.1 }}
                                 data-testid={`project-${index}`}
                             >
-                                <Card className="group bg-card p-3 md:p-4 rounded-lg transition-all duration-300 hover:bg-card-hover cursor-pointer">
-                                    <div className="relative mb-3 md:mb-4 overflow-visible">
-                                        {project.imageUrl ? (
-                                            <img
-                                                src={project.imageUrl}
-                                                alt={project.title}
-                                                className="aspect-square rounded-md object-cover shadow-lg w-full"
-                                            />
-                                        ) : (
-                                            <div className={`aspect-square rounded-md bg-gradient-to-br ${project.gradient} shadow-lg`} />
-                                        )}
-                                        <div className="absolute bottom-2 right-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                                            <Button
-                                                size="icon"
-                                                className="rounded-full w-10 h-10 md:w-12 md:h-12 bg-primary shadow-xl hover:scale-110 transition-transform"
-                                                data-testid={`button-play-project-${index}`}
-                                            >
-                                                <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
-                                            </Button>
+                                <a
+                                    href={project.link && project.link !== "#" ? project.link : undefined}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
+                                >
+                                    <Card className="group bg-card p-3 md:p-4 rounded-lg transition-all duration-300 hover:bg-card-hover cursor-pointer">
+                                        <div className="relative mb-3 md:mb-4 overflow-visible">
+                                            {project.imageUrl ? (
+                                                <img
+                                                    src={project.imageUrl}
+                                                    alt={project.title}
+                                                    className="aspect-square rounded-md object-cover shadow-lg w-full"
+                                                />
+                                            ) : (
+                                                <div className={`aspect-square rounded-md bg-gradient-to-br ${project.gradient} shadow-lg`} />
+                                            )}
+                                            <div className="absolute bottom-2 right-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                                <Button
+                                                    size="icon"
+                                                    className="rounded-full w-10 h-10 md:w-12 md:h-12 bg-primary shadow-xl hover:scale-110 transition-transform"
+                                                    data-testid={`button-play-project-${index}`}
+                                                >
+                                                    <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <h3 className="font-bold text-foreground mb-1 line-clamp-1 text-sm md:text-base">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-2">
-                                        {project.subtitle}
-                                    </p>
-                                    {project.link && project.link !== "#" && (
-                                        <a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                                            data-testid={`link-project-${index}`}
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            View <ExternalLink className="w-3 h-3" />
-                                        </a>
-                                    )}
-                                </Card>
+                                        <h3 className="font-bold text-foreground mb-1 line-clamp-1 text-sm md:text-base">
+                                            {project.title}
+                                        </h3>
+                                        <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 mb-2">
+                                            {project.subtitle}
+                                        </p>
+                                        {project.link && project.link !== "#" && (
+                                            <span className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                                                View <ExternalLink className="w-3 h-3" />
+                                            </span>
+                                        )}
+                                    </Card>
+                                </a>
                             </motion.div>
                         ))}
                     </div>

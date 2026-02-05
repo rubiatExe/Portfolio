@@ -53,7 +53,7 @@ async function seed() {
       subtitle: "AI-Powered Hiring Platform · Product Strategy · UX Design",
       gradient: "from-emerald-500 to-teal-600",
       imageUrl: "/project_teamflow.png",
-      link: "https://github.com/rubiatExe/TeamFlow",
+      link: "https://team-floww.vercel.app/",
       order: 0,
     },
     {
