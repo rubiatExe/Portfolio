@@ -7,7 +7,7 @@ async function seed() {
   // Seed profile
   const profileData: InsertProfile = {
     name: "Rubiat Bin Faisal",
-    role: "Associate Product Manager",
+    role: "Software Engineer with Product Mindset",
     monthlyListeners: "500,000+", // Artistic license for "views/impact"
     bio: "Product-minded builder with a strong technical foundation. Experienced in leading cross-functional teams, defining product roadmaps, and shipping user-centric solutions in fast-paced startup environments. Passionate about leveraging AI to solve real-world problems and drive measurable business outcomes.",
     education: "Bachelor’s in Computer Science, Lehigh University",
