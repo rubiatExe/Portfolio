@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -19,7 +19,23 @@ import {
   Code2,
   Database,
   Cloud,
-  Boxes
+  Boxes,
+  Cpu,
+  Lightbulb,
+  Rocket,
+  Users,
+  BarChart2,
+  Layers,
+  BrainCircuit,
+  Activity,
+  ShieldCheck,
+  GitBranch,
+  Map,
+  FileText,
+  TrendingUp,
+  Calendar,
+  MessageSquare,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -41,10 +57,108 @@ const skillIcons: Record<string, React.ReactNode> = {
   "AWS": <Cloud className="w-5 h-5 text-orange-500" />,
 };
 
+type Role = "SWE" | "PM";
+
+interface RoleSkill {
+  name: string;
+  proficiency: string;
+  experience: string;
+  icon: React.ReactNode;
+}
+
+const roleSkills: Record<Role, RoleSkill[]> = {
+  SWE: [
+    { name: "Python (FastAPI, FastMCP)", proficiency: "Expert", experience: "3+ yrs", icon: <Code2 className="w-5 h-5 text-blue-400" /> },
+    { name: "TypeScript / React / Next.js", proficiency: "Expert", experience: "3+ yrs", icon: <Boxes className="w-5 h-5 text-cyan-400" /> },
+    { name: "Multi-Agent Systems & MCP", proficiency: "Expert", experience: "2 yrs", icon: <BrainCircuit className="w-5 h-5 text-purple-400" /> },
+    { name: "LLM-as-a-Judge / RAG", proficiency: "Advanced", experience: "2 yrs", icon: <Cpu className="w-5 h-5 text-pink-400" /> },
+    { name: "OpenTelemetry (GenAI)", proficiency: "Advanced", experience: "1 yr", icon: <Activity className="w-5 h-5 text-emerald-400" /> },
+    { name: "PostgreSQL / pgvector", proficiency: "Advanced", experience: "3+ yrs", icon: <Database className="w-5 h-5 text-blue-600" /> },
+    { name: "Google Cloud / WIF", proficiency: "Proficient", experience: "2 yrs", icon: <Cloud className="w-5 h-5 text-orange-400" /> },
+    { name: "CI/CD / GitHub Actions", proficiency: "Proficient", experience: "2 yrs", icon: <GitBranch className="w-5 h-5 text-green-400" /> },
+  ],
+  PM: [
+    { name: "Product Strategy & Roadmapping", proficiency: "Expert", experience: "3+ yrs", icon: <Map className="w-5 h-5 text-indigo-400" /> },
+    { name: "PRD Writing & Spec Design", proficiency: "Expert", experience: "3+ yrs", icon: <FileText className="w-5 h-5 text-yellow-400" /> },
+    { name: "User Research & Discovery", proficiency: "Advanced", experience: "2 yrs", icon: <Users className="w-5 h-5 text-pink-400" /> },
+    { name: "Data Analysis & Metrics", proficiency: "Advanced", experience: "3+ yrs", icon: <TrendingUp className="w-5 h-5 text-emerald-400" /> },
+    { name: "Agile / Sprint Planning", proficiency: "Advanced", experience: "2 yrs", icon: <Calendar className="w-5 h-5 text-cyan-400" /> },
+    { name: "Generative AI Product Design", proficiency: "Advanced", experience: "2 yrs", icon: <Zap className="w-5 h-5 text-orange-400" /> },
+    { name: "Cross-functional Leadership", proficiency: "Proficient", experience: "2 yrs", icon: <MessageSquare className="w-5 h-5 text-purple-400" /> },
+    { name: "Security & Compliance Awareness", proficiency: "Proficient", experience: "1 yr", icon: <ShieldCheck className="w-5 h-5 text-green-400" /> },
+  ],
+};
+
+const roleContent: Record<Role, {
+  label: string;
+  tagline: string;
+  discographySubtitle: string;
+  bio: string;
+  futureFeatures: { icon: React.ReactNode; title: string; description: string }[];
+}> = {
+  SWE: {
+    label: "Software Engineer",
+    tagline: "Building reliable, scalable systems from the ground up.",
+    discographySubtitle: "Full-stack builds & engineering projects",
+    bio: "Full-stack software engineer with hands-on experience building production-ready web apps. Proficient in TypeScript, React, Node.js, and PostgreSQL — I focus on writing clean, maintainable code and shipping performant systems. Passionate about developer experience, system design, and turning complex requirements into elegant solutions.",
+    futureFeatures: [
+      {
+        icon: <Cpu className="w-5 h-5 text-cyan-400" />,
+        title: "Real-Time Analytics Pipeline",
+        description: "Stream visitor interactions through a WebSocket layer into a lightweight time-series store for live dashboarding — no third-party tracking SDK required.",
+      },
+      {
+        icon: <Layers className="w-5 h-5 text-purple-400" />,
+        title: "Edge-Rendered Portfolio",
+        description: "Migrate to Next.js App Router with edge functions for sub-50ms TTFB globally, leveraging ISR for project pages and RSC for zero-JS static sections.",
+      },
+      {
+        icon: <Database className="w-5 h-5 text-blue-400" />,
+        title: "CMS-Backed Project Pages",
+        description: "Replace hardcoded project data with a headless CMS integration (Contentlayer or Sanity) so new case studies can be published without touching code.",
+      },
+      {
+        icon: <Code2 className="w-5 h-5 text-green-400" />,
+        title: "GitHub Activity Feed",
+        description: "Pull live commit + contribution data via the GitHub GraphQL API and render an interactive heatmap showing real coding cadence, language breakdown, and streak stats.",
+      },
+    ],
+  },
+  PM: {
+    label: "Product Manager",
+    tagline: "Turning user insights into roadmaps that engineers love to build.",
+    discographySubtitle: "Product launches & impact stories",
+    bio: "Product-minded builder with a technical foundation who bridges design, engineering, and business. I've led cross-functional sprints, written PRDs that shipped to production, and obsess over metrics that tie features to outcomes. Whether it's defining an MVP or prioritising a backlog, I bring structured thinking and user empathy to every decision.",
+    futureFeatures: [
+      {
+        icon: <BarChart2 className="w-5 h-5 text-emerald-400" />,
+        title: "Impact Metrics Dashboard",
+        description: "Surface measurable outcomes (DAU lift, churn reduction, NPS delta) for each project — giving recruiters and hiring managers quantitative proof of product impact.",
+      },
+      {
+        icon: <Lightbulb className="w-5 h-5 text-yellow-400" />,
+        title: "Interactive PRD Showcase",
+        description: "Embed condensed, visually-rich Product Requirements Documents for key features so visitors can see how I structure problem statements, success metrics, and scope decisions.",
+      },
+      {
+        icon: <Users className="w-5 h-5 text-pink-400" />,
+        title: "User Research Case Studies",
+        description: "Walk through interview synthesis, affinity mapping, and insight-to-feature traceability for past projects — demonstrating a rigorous discovery process.",
+      },
+      {
+        icon: <Rocket className="w-5 h-5 text-orange-400" />,
+        title: "Roadmap Storytelling Mode",
+        description: "An interactive timeline view that maps features to quarters, showing how I balance quick wins, strategic bets, and technical debt within a real planning cycle.",
+      },
+    ],
+  },
+};
+
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState([75]);
-  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const [activeRole, setActiveRole] = useState<Role>("SWE");
+  const audioRef = useRef<HTMLAudioElement>(null);
   const { scrollY } = useScroll();
   const headerBg = useTransform(
     scrollY,
@@ -254,9 +368,29 @@ export default function Home() {
                   <h1 className="text-4xl md:text-6xl lg:text-7xl font-black">{profile.name}</h1>
                   <BadgeCheck className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
                 </div>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  <span className="font-bold text-foreground">{profile.monthlyListeners}</span> monthly listeners · {profile.role}
+                <p className="text-sm md:text-base text-muted-foreground mb-4">
+                  <span className="font-bold text-foreground">{profile.monthlyListeners}</span> monthly listeners · {roleContent[activeRole].label}
                 </p>
+                {/* SWE / PM Role Toggle */}
+                <div
+                  className="inline-flex items-center rounded-full bg-black/40 border border-white/10 p-1 gap-1"
+                  data-testid="role-toggle"
+                >
+                  {(["SWE", "PM"] as Role[]).map((role) => (
+                    <button
+                      key={role}
+                      onClick={() => setActiveRole(role)}
+                      data-testid={`role-${role.toLowerCase()}`}
+                      className={`relative px-4 py-1.5 rounded-full text-xs font-bold tracking-wider transition-all duration-300 ${
+                        activeRole === role
+                          ? "bg-primary text-black shadow-md"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {role}
+                    </button>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </section>
@@ -296,8 +430,14 @@ export default function Home() {
           {/* Popular Section (Skills) */}
           <section className="px-4 md:px-8 py-6 md:py-8">
             <h2 className="text-2xl font-bold mb-6">Popular</h2>
-            <div className="space-y-1">
-              {skills.map((skill, index) => (
+            <motion.div
+              key={activeRole + "-skills"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-1"
+            >
+              {roleSkills[activeRole].map((skill, index) => (
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, x: -20 }}
@@ -310,7 +450,7 @@ export default function Home() {
                     {index + 1}
                   </div>
                   <div className="flex-shrink-0">
-                    {skillIcons[skill.name] || <Code2 className="w-5 h-5 text-muted-foreground" />}
+                    {skill.icon}
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm md:text-base">{skill.name}</p>
@@ -323,14 +463,22 @@ export default function Home() {
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
 
           {/* Discography Section (Projects) */}
           <section className="px-4 md:px-8 py-8 md:py-12">
             <div className="mb-6">
               <h2 className="text-2xl font-bold">Discography</h2>
-              <p className="text-sm md:text-base text-muted-foreground">Featured projects and work</p>
+              <motion.p
+                key={activeRole + "-disc"}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-sm md:text-base text-muted-foreground"
+              >
+                {roleContent[activeRole].discographySubtitle}
+              </motion.p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
               {projects.map((project, index) => (
@@ -391,15 +539,22 @@ export default function Home() {
             <h2 className="text-2xl font-bold mb-6">About</h2>
             <Card className="bg-card p-6 md:p-8 rounded-lg max-w-4xl">
               <h3 className="text-lg md:text-xl font-bold mb-4">Artist Bio</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
-                {profile.bio}
-              </p>
+              <motion.p
+                key={activeRole + "-bio"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6"
+              >
+                {roleContent[activeRole].bio}
+              </motion.p>
               <div className="pt-4 border-t border-border">
                 <h4 className="font-bold mb-2 text-sm md:text-base">Education</h4>
                 <p className="text-sm md:text-base text-muted-foreground">{profile.education}</p>
               </div>
             </Card>
           </section>
+
         </div>
       </main>
 

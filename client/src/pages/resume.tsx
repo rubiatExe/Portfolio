@@ -32,7 +32,7 @@ export default function Resume() {
                         className="hidden md:flex"
                         data-testid="button-download"
                     >
-                        <a href="/Rubiat-Resume-Final.pdf" download>
+                        <a href="/Rubiat-Faisal-Resume-ai copy.pdf" download>
                             <Download className="w-4 h-4 mr-2" />
                             Download
                         </a>
@@ -44,7 +44,7 @@ export default function Resume() {
                         className="hidden md:flex"
                         data-testid="button-open-new-tab"
                     >
-                        <a href="/Rubiat-Resume-Final.pdf" target="_blank" rel="noopener noreferrer">
+                        <a href="/Rubiat-Faisal-Resume-ai copy.pdf" target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Open in New Tab
                         </a>
@@ -55,7 +55,7 @@ export default function Resume() {
             {/* PDF Viewer */}
             <div className="flex-1 overflow-hidden bg-card">
                 <iframe
-                    src="/Rubiat-Resume-Final.pdf"
+                    src="/Rubiat-Faisal-Resume-ai copy.pdf"
                     className="w-full h-full border-0"
                     title="Resume PDF"
                 />
@@ -69,7 +69,7 @@ export default function Resume() {
                     asChild
                     className="flex-1"
                 >
-                    <a href="/Rubiat-Resume-Final.pdf" download>
+                    <a href="/Rubiat-Faisal-Resume-ai copy.pdf" download>
                         <Download className="w-4 h-4 mr-2" />
                         Download
                     </a>
@@ -80,7 +80,7 @@ export default function Resume() {
                     asChild
                     className="flex-1"
                 >
-                    <a href="/Rubiat-Resume-Final.pdf" target="_blank" rel="noopener noreferrer">
+                    <a href="/Rubiat-Faisal-Resume-ai copy.pdf" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-4 h-4 mr-2" />
                         Open
                     </a>
